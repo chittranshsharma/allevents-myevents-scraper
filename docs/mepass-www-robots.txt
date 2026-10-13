@@ -1,0 +1,35 @@
+# Robots.txt for MePass.in
+# Allow all crawlers to access the site
+User-agent: *
+Allow: /
+
+# Block admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /tmp/
+
+# Block search and filter URLs to prevent duplicate content
+Disallow: /*?search=*
+Disallow: /*?filter=*
+Disallow: /*?page=*
+Disallow: /*?sort=*
+
+# Allow important pages
+Allow: /events
+Allow: /artist
+Allow: /about-us
+Allow: /contact-us
+
+# Google Search needs Googlebot-Image to fetch the site icon
+User-agent: Googlebot-Image
+Allow: /favicon.ico
+Allow: /icon-192.png
+Allow: /icon-512.png
+Allow: /apple-touch-icon.png
+Allow: /apple-touch-icon-192x192.png
+Allow: /logo.png
+Allow: /images/logo.png
+
+# Sitemap location
+Sitemap: https://www.mepass.in/sitemap.xml

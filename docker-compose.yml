@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: eventpass
+      POSTGRES_USER: eventpass
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in root .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eventpass"]
+      interval: 5s
+      retries: 20
+  backend:
+    build: ./backend
+    environment: &backend_env
+      DATABASE_URL: postgresql+psycopg://eventpass:${POSTGRES_PASSWORD}@postgres:5432/eventpass
+      ADMIN_TOKEN: ${ADMIN_TOKEN:?Set ADMIN_TOKEN in root .env}
+      FRONTEND_ORIGIN: http://localhost:3000
+      SCHEDULE_MINUTES: ${SCHEDULE_MINUTES:-0}
+      ALLEVENTS_AUTHORIZED: ${ALLEVENTS_AUTHORIZED:-false}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 5s
+      retries: 20
+  worker:
+    build: ./backend
+    command: ["python", "-m", "app.crawler"]
+    environment: *backend_env
+    depends_on:
+      backend:
+        condition: service_healthy
+  frontend:
+    build: ./frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+volumes:
+  postgres_data:

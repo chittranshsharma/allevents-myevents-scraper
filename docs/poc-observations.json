@@ -1,0 +1,29 @@
+{
+  "checked_on": "2026-10-13",
+  "method": "direct permitted public HTML, JSON-LD",
+  "events": [
+    {
+      "name": "Book tickets to  Wonder Women Wednesday",
+      "url": "https://www.mepass.in/city/Bengaluru/events/book-tickets-to-wonder-women-wednesday-1",
+      "price": null,
+      "date": null,
+      "candidates": 0
+    },
+    {
+      "name": "Book tickets to  Wonder Women",
+      "url": "https://www.mepass.in/city/Bengaluru/events/book-tickets-to-wonder-women-1",
+      "price": null,
+      "date": null,
+      "candidates": 0
+    },
+    {
+      "name": "Out  of Syllabus",
+      "url": "https://www.mepass.in/city/Bengaluru/events/out-of-syllabus-5",
+      "price": null,
+      "date": null,
+      "candidates": 0
+    }
+  ],
+  "coupon_candidates": 0,
+  "all_events_collection": "blocked by terms"
+}
