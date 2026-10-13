@@ -34,6 +34,9 @@ def test_full_offer_without_code():assert extract_promotions('Get 100% off eligi
 def test_negated_full_offer():assert extract_promotions('Use code SAMPLE, not 100% off.',True)[0]['discount_value'] is None
 def test_unrelated_sentence():assert extract_promotions('Use code MAYBE. Other tickets are 100% off.',True)[0]['discount_value'] is None
 def test_partial_advertised_unverified():assert extract_promotions('Coupon code SAVE20 for 20% off.',True)[0]['verification_status']=='UNVERIFIED CODE'
+def test_adjacent_all_events_offer_lines():
+    p=extract_promotions('Get 5% off on tickets\nUse Code: EarlyBird',True)[0]
+    assert p['coupon_code']=='EarlyBird' and p['discount_value']==Decimal('5') and p['verification_status']=='UNVERIFIED CODE'
 def test_explicit_expiration():assert extract_promotions('Coupon code FREEPASS for 100% off, expires 2027-01-01T10:00:00Z.',True)[0]['expiration_at'] is not None
 
 

@@ -39,9 +39,26 @@ def calculate(price, kind, value, fees=None):
 
 
 def extract_promotions(text, official=False):
-    """Sentence-local evidence prevents connecting a code to an unrelated offer."""
+    """Extract explicit codes while allowing an offer label and code label on adjacent lines."""
     candidates = []
-    for sentence in re.split(r'(?<=[.!?])\s+|[\n\r]+', text):
+    raw_lines = [line.strip() for line in re.split(r'[\n\r]+', text) if line.strip()]
+    code_hint = re.compile(r'\b(?:promo(?:tion)?\s+code|coupon(?:\s+code)?|use\s+(?:the\s+)?code)\b', re.I)
+    offer_hint = re.compile(r'(?:\d{1,3}(?:\.\d+)?\s*%|(?:₹|INR\s*)[\d,]+|free|complimentary).{0,35}(?:off|discount|ticket|admission)', re.I)
+    lines = []
+    i = 0
+    while i < len(raw_lines):
+        line = raw_lines[i]
+        if code_hint.search(line) and not offer_hint.search(line):
+            if i + 1 < len(raw_lines) and offer_hint.search(raw_lines[i + 1]):
+                line = f'{line} {raw_lines[i + 1]}'; i += 1
+            elif lines and offer_hint.search(lines[-1]):
+                line = f'{lines.pop()} {line}'
+        lines.append(line)
+        i += 1
+    sentences = []
+    for line in lines:
+        sentences.extend(re.split(r'(?<=[.!?])\s+', line))
+    for sentence in sentences:
         if len(sentence) > 1500:
             continue
         code = re.search(r'\b(?:promo(?:tion)?\s+code|coupon(?:\s+code)?|use\s+(?:the\s+)?code)\s*[:=\-]?\s*[\"\x27`]?([A-Za-z0-9][A-Za-z0-9_-]{2,49})\b', sentence, re.I)
