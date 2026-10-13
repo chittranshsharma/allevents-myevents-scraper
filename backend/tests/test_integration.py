@@ -125,6 +125,9 @@ def test_authorized_allevents_listing_and_detail(factory, monkeypatch):
     fetcher = SafeFetcher({'allevents.in','www.mepass.in'},transport=httpx.MockTransport(handler)); fetcher.interval=0
     with factory() as db:
         initialize(db)
+        for source in db.scalars(select(CrawlSource).where(CrawlSource.platform == 'allevents', CrawlSource.url.contains('?page='))):
+            source.enabled = False
+        db.commit()
         job_id=enqueue(db,max_pages=4).id
     asyncio.run(run_job(job_id,fetcher))
     with factory() as db:

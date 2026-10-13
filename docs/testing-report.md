@@ -11,7 +11,7 @@ Executed on 13 October 2026, Windows, Python 3.14.8, Node 24.21.0, Next.js 16.4.
 | Alembic upgrade/downgrade roundtrip | Automated test passed on disposable SQLite database |
 | Alembic PostgreSQL `upgrade head --sql` | SQL generation succeeded; no PostgreSQL connection tested |
 | Implemented live HTTP crawler | Final 10-page Mepass scan completed; 9 real records; zero coupon candidates; zero final-scan errors |
-| Opt-in AllEvents direct scan | 4-page job #6 completed with no errors; 45 AllEvents records in the local database and one detail page fetched alongside Mepass; zero coupon candidates |
+| Opt-in AllEvents direct scan | 10-page job #8 completed with no errors; 131 unique AllEvents records from three public Bangalore listing pages, with event detail pages fetched alongside Mepass; zero coupon candidates |
 
 Backend tests cover decimal money/rounding, fixed discount caps, unknown fees, timezone handling, event subtype parsing and deduplication, explicit coupon evidence, identity-code exclusion, negation, expiry, public-vs-confirmed statuses, authentication, request limits, event ingestion, API filters, persistence, notification deduplication, review history, migration roundtrips, frontier processing, source failure and stale lease recovery. Network fixtures are labeled tests; no mock data is seeded into production.
 

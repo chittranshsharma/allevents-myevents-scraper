@@ -65,7 +65,7 @@ npm.cmd run dev
 
 Open [the dashboard](http://localhost:3000) and [the API docs](http://127.0.0.1:8000/docs). Copy `ADMIN_TOKEN` from `backend/.env` into the dashboard before starting a discovery job.
 
-The default scan uses the reviewed Mepass Bengaluru listing. To include AllEvents’ Bangalore public listing, set this in `backend/.env` and restart both the API and worker:
+The default scan uses the reviewed Mepass Bengaluru listing. To include the first three public AllEvents Bangalore listing pages, set this in `backend/.env` and restart both the API and worker:
 
 ```dotenv
 ALLEVENTS_AUTHORIZED=true

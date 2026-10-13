@@ -18,10 +18,11 @@ def initialize(session):
     url = 'https://www.mepass.in/city/bengaluru/event/category/default'
     if not session.scalar(select(CrawlSource).where(CrawlSource.url == url)):
         session.add(CrawlSource(url=url, platform='mepass', source_type='listing', permission_basis='Robots explicitly allows public crawling; terms reviewed 2026-10-13, no automation prohibition observed.', terms_url='https://www.mepass.in/terms-condition', official=True))
-    allevents_url = 'https://allevents.in/bangalore/all'
-    source = session.scalar(select(CrawlSource).where(CrawlSource.url == allevents_url))
-    if settings.allevents_authorized and not source:
-        session.add(CrawlSource(url=allevents_url, platform='allevents', source_type='listing', permission_basis='Owner reported direct AllEvents authorization for personal use on 2026-10-13.', terms_url='https://allevents.in/conditions', official=True))
-    elif source:
-        source.enabled = settings.allevents_authorized
+    for page in range(1, 4):
+        allevents_url = 'https://allevents.in/bangalore/all' + (f'?page={page}' if page > 1 else '')
+        source = session.scalar(select(CrawlSource).where(CrawlSource.url == allevents_url))
+        if settings.allevents_authorized and not source:
+            session.add(CrawlSource(url=allevents_url, platform='allevents', source_type='listing', permission_basis='Owner reported direct AllEvents authorization for personal use on 2026-10-13.', terms_url='https://allevents.in/conditions', official=True))
+        elif source:
+            source.enabled = settings.allevents_authorized
     session.commit()
